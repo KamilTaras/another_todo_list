@@ -3,7 +3,7 @@
 This is a small project about **toDo list**, which I make in **Flutter**
 Even thought it is simple project, it gives me a lot of fun to make.
 
-The idea of this app is simple. We have** 3 categories** of tasks:
+The idea of this app is simple. We have **3 categories** of tasks:
 - to do
 - in progress
 - done
