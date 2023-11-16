@@ -7,10 +7,11 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      initialIndex: 1,
+      initialIndex: 0,
       length: 3,
       child: Scaffold(
         appBar: AppBar(
+          title: Text("Another ToDo list"),
           bottom: const TabBar(
             tabs: <Widget>[
               Tab(
@@ -29,10 +30,10 @@ class HomePage extends StatelessWidget {
           children: <Widget>[
             ToDoList(),
             Center(
-              child: Text("It's rainy here"),
+              child: Text("This page is coming"),
             ),
             Center(
-              child: Text("It's sunny here"),
+              child: Text("This page is coming also"),
             ),
           ],
         ),

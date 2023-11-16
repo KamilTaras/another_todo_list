@@ -8,8 +8,6 @@ class ToDoList extends StatefulWidget {
 }
 
 class _ToDoListState extends State<ToDoList> {
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(body: InProgressPage());
@@ -50,6 +48,17 @@ class _InProgressPageState extends State<InProgressPage> {
                 decoration: new InputDecoration.collapsed(
                     hintText: 'Write a task to do'),
                 controller: controller1,
+                onSubmitted: (String value) {
+                  // Check if the text is not empty
+
+                    setState(() {
+                      // Add the task to the list
+                      toDoList.add(value.trim());
+                      // Clear the text field
+                      controller1.clear();
+                    });
+
+                },
               ),
             ),
           ),
@@ -70,24 +79,25 @@ class _InProgressPageState extends State<InProgressPage> {
       itemBuilder: (context, index) => Dismissible(
         key: UniqueKey(),
         child: ListTile(
-            title: SizedBox(
-                height: 50,
-                child: Card(
-                    color: Colors.deepPurple.shade100,
-                    child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: Padding(
-                          padding: const EdgeInsets.only(left: 10.0),
-                          child: textWithCheckbox(index),
-                        )))),
-            ),
-        onDismissed: (dissmissDirection) {
-          setState(() {
-              toDoList.removeAt(index);
+          title: SizedBox(
+            // height: 50,
 
+            child: Card(
+                color: Colors.deepPurple.shade50,
+                child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 10.0),
+                      child: textWithCheckbox(index),
+                    ))),
+          ),
+        ),
+        onDismissed: (dismissDirection) {
+          setState(() {
+            toDoList.removeAt(index);
           });
-          // ScaffoldMessenger.of(context)
-          //     .showSnackBar(SnackBar(content: Text('$index dismissed')));
+          ScaffoldMessenger.of(context)
+              .showSnackBar(SnackBar(content: Text('Task number ${index + 1} dismissed')));
         },
       ),
     ));
@@ -122,7 +132,7 @@ class _InProgressPageState extends State<InProgressPage> {
           },
           child: Text("Add")),
       ElevatedButton(
-          onPressed: () => dialogBuilder(context), child: Text("Delete selected"))
+          onPressed: () => dialogBuilder(context), child: Text("Delete all"))
     ]);
   }
 
