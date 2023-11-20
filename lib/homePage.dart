@@ -1,8 +1,17 @@
+import 'package:another_todo_list/TemplatePage.dart';
 import 'package:flutter/material.dart';
+import 'inProgressPage.dart';
 import 'toDoPage.dart';
 
-class HomePage extends StatelessWidget {
+
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
@@ -26,12 +35,10 @@ class HomePage extends StatelessWidget {
             ],
           ),
         ),
-        body: const TabBarView(
+        body:  TabBarView(
           children: <Widget>[
-            ToDoList(),
-            Center(
-              child: Text("This page is coming"),
-            ),
+            ToDoPageTasks(),
+            TestPageTest(),
             Center(
               child: Text("This page is coming also"),
             ),
