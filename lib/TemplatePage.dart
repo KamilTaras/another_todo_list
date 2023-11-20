@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-abstract class TemplateClass extends StatefulWidget {
+class TemplateClass extends StatefulWidget {
   const TemplateClass({super.key});
 
   @override
@@ -10,6 +10,9 @@ abstract class TemplateClass extends StatefulWidget {
 class _TemplateClassState extends State<TemplateClass> with AutomaticKeepAliveClientMixin {
   static List<String> toDoList = [];
   Map<String, bool> checked = {};
+
+  @override
+  bool get wantKeepAlive => true;
 
   @override
   void initState() {
@@ -164,7 +167,5 @@ class _TemplateClassState extends State<TemplateClass> with AutomaticKeepAliveCl
     );
   }
 
-  @override
-  // TODO: implement wantKeepAlive
-  bool get wantKeepAlive => true;
+
 }

@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
 
-
-class ToDoPageTasks extends StatefulWidget {
-  const ToDoPageTasks({super.key});
+class ToDoTasksPage extends StatefulWidget {
+  const ToDoTasksPage({super.key});
 
   @override
-  State<ToDoPageTasks> createState() => _ToDoPageTasksState();
+  State<ToDoTasksPage> createState() => _ToDoTasksPageState();
 }
 
-class _ToDoPageTasksState extends State<ToDoPageTasks> {
-  final List<String> toDoList = [];
-  final Map<String, bool> checked = {};
+class _ToDoTasksPageState extends State<ToDoTasksPage> with AutomaticKeepAliveClientMixin {
+  static List<String> toDoList = ["To-Do task 1"];
+  Map<String, bool> checked = {};
+
+  @override
+  bool get wantKeepAlive => true;
 
   @override
   void initState() {
@@ -164,4 +166,6 @@ class _ToDoPageTasksState extends State<ToDoPageTasks> {
       },
     );
   }
+
+
 }

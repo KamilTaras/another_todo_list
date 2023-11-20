@@ -1,5 +1,6 @@
 import 'package:another_todo_list/TemplatePage.dart';
 import 'package:flutter/material.dart';
+import 'DonePage.dart';
 import 'inProgressPage.dart';
 import 'toDoPage.dart';
 
@@ -37,11 +38,9 @@ class _HomePageState extends State<HomePage> {
         ),
         body:  TabBarView(
           children: <Widget>[
-            ToDoPageTasks(),
-            TestPageTest(),
-            Center(
-              child: Text("This page is coming also"),
-            ),
+            ToDoTasksPage(),
+            InProgressTasksPage(),
+            DoneTasksPage()
           ],
         ),
       ),
