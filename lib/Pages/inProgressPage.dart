@@ -1,6 +1,3 @@
-import 'package:another_todo_list/TemplatePage.dart';
-import 'package:flutter/material.dart';
-
 import 'package:flutter/material.dart';
 
 class InProgressTasksPage extends StatefulWidget {
