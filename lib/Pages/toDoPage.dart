@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../taskModel.dart';
 
 class ToDoTasksPage extends StatefulWidget {
   const ToDoTasksPage({super.key});
@@ -9,124 +12,107 @@ class ToDoTasksPage extends StatefulWidget {
 
 class _ToDoTasksPageState extends State<ToDoTasksPage>
     with AutomaticKeepAliveClientMixin {
-  // static List<String> toDoList = ["To-Do task 1"];
-  Map<String, bool> checked = {};
 
   @override
   bool get wantKeepAlive => true;
 
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   for (var taskIndex in toDoList) {
-  //     checked[taskIndex] = false;
-  //   }
-  // }
-
-  TextEditingController controller1 = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Container(
       child: Column(
         children: [
-          listOfTasks(),
+          listOfTasks(context),
           Divider(),
-          userInput(),
+          userInput(context),
           Divider(),
-          bottomButtons(),
+          bottomButtons(context),
         ],
       ),
     );
   }
 
-  Flexible listOfTasks() {
+  Flexible listOfTasks(BuildContext context) {
+    final model = Provider.of<TasksModel>(context, listen: true);
     return Flexible(
-        child: ListView.builder(
-      itemCount: toDoList.length,
-      itemBuilder: (context, index) => Dismissible(
-        key: UniqueKey(),
-        child: ListTile(
-          title: SizedBox(
-            // height: 50,
-            child: Card(
-                color: Colors.deepPurple.shade50,
-                child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 10.0),
-                      child: textWithCheckbox(index),
-                    ))),
+      child: ListView.builder(
+        itemCount: model.toDoList.length,
+        itemBuilder: (context, index) => Dismissible(
+          key: UniqueKey(),
+          onDismissed: (dismissDirection) {
+            // Update this to use transfer method from model
+            model.transfer_from_toDoList_to_inProgress(model.toDoList[index]);
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text('Task moved to in progress')),
+            );
+          },
+          child: ListTile(
+            title: Card(
+              color: Colors.deepPurple.shade50,
+              child: Padding(
+                padding: const EdgeInsets.only(left: 10.0),
+                child: textWithCheckbox(context, index),
+              ),
+            ),
           ),
         ),
-        onDismissed: (dismissDirection) {
-          setState(() {
-            toDoList.removeAt(index);
-          });
-          ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text('Task number ${index + 1} dismissed')));
-        },
       ),
-    ));
+    );
   }
 
-  Padding userInput() {
+  Padding userInput(BuildContext context) {
+    final model = Provider.of<TasksModel>(context, listen: false);
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: Container(
-        child: TextField(
-          decoration:
-              new InputDecoration.collapsed(hintText: 'Write a task to do'),
-          controller: controller1,
-          onSubmitted: (String value) {
-            setState(() {
-              // Add the task to the list
-              toDoList.add(value.trim());
-              // Clear the text field
-              controller1.clear();
-            });
-          },
-        ),
+      child: TextField(
+        decoration: InputDecoration.collapsed(hintText: 'Write a task to do'),
+        controller: model.taskController,
+        onSubmitted: (String value) {
+          model.addTask();
+        },
       ),
     );
   }
 
-  Widget bottomButtons() {
+  Widget bottomButtons(BuildContext context) {
+    final model = Provider.of<TasksModel>(context, listen: false);
     return Padding(
       padding: const EdgeInsets.only(bottom: 15.0),
-      child: Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
-        ElevatedButton(
-            onPressed: () {
-              setState(() {
-                toDoList.add(controller1.text);
-                controller1.clear();
-              });
-            },
-            child: Text("Add")),
-        ElevatedButton(
-            onPressed: () => dialogBuilder(context), child: Text("Delete all"))
-      ]),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          ElevatedButton(
+            onPressed: model.addTask,
+            child: Text("Add"),
+          ),
+          ElevatedButton(
+            onPressed: () => dialogBuilder(context, model),
+            child: Text("Delete all"),
+          ),
+        ],
+      ),
     );
   }
 
-  CheckboxListTile textWithCheckbox(int index) {
+  CheckboxListTile textWithCheckbox(BuildContext context, int index) {
+    final model = Provider.of<TasksModel>(context);
+    String task = model.toDoList[index];
     return CheckboxListTile(
-        title: Text(
-          toDoList[index],
-          style: TextStyle(
-            decoration: checked[toDoList[index]] ?? false
-                ? TextDecoration.lineThrough
-                : TextDecoration.none,
-          ),
+      title: Text(
+        task,
+        style: TextStyle(
+          decoration: model.checked[task] ?? false
+              ? TextDecoration.lineThrough
+              : TextDecoration.none,
         ),
-        value: checked[toDoList[index]] ?? false,
-        onChanged: (bool? value) {
-          setState(() {
-            checked[toDoList[index]] = value!;
-          });
-        });
+      ),
+      value: model.checked[task] ?? false,
+      onChanged: (bool? value) {
+        model.toggleTaskStatus(task, value!);
+      },
+    );
   }
 
-  dialogBuilder(BuildContext context) {
+  dialogBuilder(BuildContext context, TasksModel model) {
     return showDialog<void>(
       context: context,
       builder: (BuildContext context) {
@@ -136,31 +122,18 @@ class _ToDoTasksPageState extends State<ToDoTasksPage>
               'Are you sure that you want to delete all of the tasks?'),
           actions: <Widget>[
             TextButton(
-              style: TextButton.styleFrom(
-                backgroundColor: Colors.green.shade200,
-                textStyle: Theme.of(context).textTheme.labelLarge,
-              ),
-              child: const Text(
-                'No',
-                style: TextStyle(color: Colors.black54),
-              ),
+              style:
+                  TextButton.styleFrom(backgroundColor: Colors.green.shade200),
+              child: const Text('No', style: TextStyle(color: Colors.black54)),
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
             TextButton(
-              style: TextButton.styleFrom(
-                backgroundColor: Colors.red.shade200,
-                textStyle: Theme.of(context).textTheme.labelLarge,
-              ),
-              child: const Text(
-                'Yes',
-                style: TextStyle(color: Colors.black54),
-              ),
+              style: TextButton.styleFrom(backgroundColor: Colors.red.shade200),
+              child: const Text('Yes', style: TextStyle(color: Colors.black54)),
               onPressed: () {
-                setState(() {
-                  toDoList.clear();
-                });
+                model.clearTasks(); // Clear tasks using model
                 Navigator.of(context).pop();
               },
             ),

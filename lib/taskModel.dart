@@ -5,6 +5,8 @@ class TasksModel extends ChangeNotifier {
   List<String> inProgressList = ["in progress task 1"];
   List<String> doneList = ["done task 1"];
 
+  Map<String, bool> checked = {};
+
   TextEditingController taskController = TextEditingController();
 
 
@@ -46,8 +48,15 @@ class TasksModel extends ChangeNotifier {
     notifyListeners();
   }
 
-
-
+  void clearTasks() {
+    toDoList.clear();
+    checked.clear();
+    notifyListeners();
+  }
+  void toggleTaskStatus(String task, bool isChecked) {
+    checked[task] = isChecked;
+    notifyListeners();
+  }
 // Add, Remove, or Move tasks methods here
 // Call notifyListeners() after modifying the lists
 }
