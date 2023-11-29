@@ -1,4 +1,6 @@
+import 'package:another_todo_list/taskModel.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class InProgressTasksPage extends StatefulWidget {
   const InProgressTasksPage({super.key});
@@ -81,6 +83,7 @@ class _InProgressTasksPageState extends State<InProgressTasksPage> with Automati
             ),
             onDismissed: (dismissDirection) {
               setState(() {
+                context.read<TasksModel>().toDoList.toString();
                 toDoList.removeAt(index);
               });
               ScaffoldMessenger.of(context)

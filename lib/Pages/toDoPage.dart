@@ -7,20 +7,21 @@ class ToDoTasksPage extends StatefulWidget {
   State<ToDoTasksPage> createState() => _ToDoTasksPageState();
 }
 
-class _ToDoTasksPageState extends State<ToDoTasksPage> with AutomaticKeepAliveClientMixin {
-  static List<String> toDoList = ["To-Do task 1"];
+class _ToDoTasksPageState extends State<ToDoTasksPage>
+    with AutomaticKeepAliveClientMixin {
+  // static List<String> toDoList = ["To-Do task 1"];
   Map<String, bool> checked = {};
 
   @override
   bool get wantKeepAlive => true;
 
-  @override
-  void initState() {
-    super.initState();
-    for (var taskIndex in toDoList) {
-      checked[taskIndex] = false;
-    }
-  }
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   for (var taskIndex in toDoList) {
+  //     checked[taskIndex] = false;
+  //   }
+  // }
 
   TextEditingController controller1 = TextEditingController();
   @override
@@ -30,30 +31,9 @@ class _ToDoTasksPageState extends State<ToDoTasksPage> with AutomaticKeepAliveCl
         children: [
           listOfTasks(),
           Divider(),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Container(
-              child: TextField(
-                decoration: new InputDecoration.collapsed(
-                    hintText: 'Write a task to do'),
-                controller: controller1,
-                onSubmitted: (String value) {
-                  setState(() {
-                    // Add the task to the list
-                    toDoList.add(value.trim());
-                    // Clear the text field
-                    controller1.clear();
-                  });
-
-                },
-              ),
-            ),
-          ),
+          userInput(),
           Divider(),
-          Padding(
-            padding: const EdgeInsets.only(bottom: 15.0),
-            child: bottomButtons(),
-          ),
+          bottomButtons(),
         ],
       ),
     );
@@ -62,32 +42,70 @@ class _ToDoTasksPageState extends State<ToDoTasksPage> with AutomaticKeepAliveCl
   Flexible listOfTasks() {
     return Flexible(
         child: ListView.builder(
-          itemCount: toDoList.length,
-          itemBuilder: (context, index) => Dismissible(
-            key: UniqueKey(),
-            child: ListTile(
-              title: SizedBox(
-                // height: 50,
-
-                child: Card(
-                    color: Colors.deepPurple.shade50,
-                    child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: Padding(
-                          padding: const EdgeInsets.only(left: 10.0),
-                          child: textWithCheckbox(index),
-                        ))),
-              ),
-            ),
-            onDismissed: (dismissDirection) {
-              setState(() {
-                toDoList.removeAt(index);
-              });
-              ScaffoldMessenger.of(context)
-                  .showSnackBar(SnackBar(content: Text('Task number ${index + 1} dismissed')));
-            },
+      itemCount: toDoList.length,
+      itemBuilder: (context, index) => Dismissible(
+        key: UniqueKey(),
+        child: ListTile(
+          title: SizedBox(
+            // height: 50,
+            child: Card(
+                color: Colors.deepPurple.shade50,
+                child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 10.0),
+                      child: textWithCheckbox(index),
+                    ))),
           ),
-        ));
+        ),
+        onDismissed: (dismissDirection) {
+          setState(() {
+            toDoList.removeAt(index);
+          });
+          ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text('Task number ${index + 1} dismissed')));
+        },
+      ),
+    ));
+  }
+
+  Padding userInput() {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Container(
+        child: TextField(
+          decoration:
+              new InputDecoration.collapsed(hintText: 'Write a task to do'),
+          controller: controller1,
+          onSubmitted: (String value) {
+            setState(() {
+              // Add the task to the list
+              toDoList.add(value.trim());
+              // Clear the text field
+              controller1.clear();
+            });
+          },
+        ),
+      ),
+    );
+  }
+
+  Widget bottomButtons() {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 15.0),
+      child: Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
+        ElevatedButton(
+            onPressed: () {
+              setState(() {
+                toDoList.add(controller1.text);
+                controller1.clear();
+              });
+            },
+            child: Text("Add")),
+        ElevatedButton(
+            onPressed: () => dialogBuilder(context), child: Text("Delete all"))
+      ]),
+    );
   }
 
   CheckboxListTile textWithCheckbox(int index) {
@@ -106,21 +124,6 @@ class _ToDoTasksPageState extends State<ToDoTasksPage> with AutomaticKeepAliveCl
             checked[toDoList[index]] = value!;
           });
         });
-  }
-
-  Row bottomButtons() {
-    return Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
-      ElevatedButton(
-          onPressed: () {
-            setState(() {
-              toDoList.add(controller1.text);
-              controller1.clear();
-            });
-          },
-          child: Text("Add")),
-      ElevatedButton(
-          onPressed: () => dialogBuilder(context), child: Text("Delete all"))
-    ]);
   }
 
   dialogBuilder(BuildContext context) {
@@ -166,6 +169,4 @@ class _ToDoTasksPageState extends State<ToDoTasksPage> with AutomaticKeepAliveCl
       },
     );
   }
-
-
 }

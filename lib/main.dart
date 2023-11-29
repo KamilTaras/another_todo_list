@@ -18,12 +18,15 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'Input Widget',
-        theme: ThemeData(
-          primarySwatch: Colors.purple,
-        ),
-        home: HomePage());
+    return MultiProvider(
+      providers: [ChangeNotifierProvider(create: (context) => TasksModel())],
+      child: MaterialApp(
+          debugShowCheckedModeBanner: false,
+          title: 'Input Widget',
+          theme: ThemeData(
+            primarySwatch: Colors.purple,
+          ),
+          home: HomePage()),
+    );
   }
 }
