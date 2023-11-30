@@ -24,7 +24,7 @@ class MyApp extends StatelessWidget {
           debugShowCheckedModeBanner: false,
           title: 'Input Widget',
           theme: ThemeData(
-            primarySwatch: Colors.purple,
+            primarySwatch: Colors.lightBlue,
           ),
           home: HomePage()),
     );

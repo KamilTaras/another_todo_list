@@ -60,28 +60,28 @@ class _ToDoTasksPageState extends State<ToDoTasksPage>
   }
 
   Padding userInput(BuildContext context) {
-    final model = Provider.of<TasksModel>(context, listen: false);
+    final model = Provider.of<TasksModel>(context, listen: true);
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: TextField(
         decoration: InputDecoration.collapsed(hintText: 'Write a task to do'),
         controller: model.taskController,
         onSubmitted: (String value) {
-          model.addTask();
+          model.addTaskTo_todoList();
         },
       ),
     );
   }
 
-  Widget bottomButtons(BuildContext context) {
-    final model = Provider.of<TasksModel>(context, listen: false);
+  Widget  bottomButtons(BuildContext context) {
+    final model = Provider.of<TasksModel>(context, listen: true);
     return Padding(
       padding: const EdgeInsets.only(bottom: 15.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           ElevatedButton(
-            onPressed: model.addTask,
+            onPressed: model.addTaskTo_todoList,
             child: Text("Add"),
           ),
           ElevatedButton(

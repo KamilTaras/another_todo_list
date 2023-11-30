@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 
 class TasksModel extends ChangeNotifier {
-  List<String> toDoList = ["To-Do task 1 From provider"];
+  List<String> toDoList = [
+    "To-Do task 1 From provider",
+    "To-Do task 2 From provider",
+  ];
   List<String> inProgressList = ["in progress task 1"];
   List<String> doneList = ["done task 1"];
 
@@ -9,8 +12,7 @@ class TasksModel extends ChangeNotifier {
 
   TextEditingController taskController = TextEditingController();
 
-
-  void addTask() {
+  void addTaskTo_todoList() {
     String newTask = taskController.text.trim();
     if (newTask.isNotEmpty) {
       toDoList.add(newTask);
@@ -18,6 +20,25 @@ class TasksModel extends ChangeNotifier {
       notifyListeners();
     }
   }
+
+  void addTaskTo_InProgressList() {
+    String newTask = taskController.text.trim();
+    if (newTask.isNotEmpty) {
+      inProgressList.add(newTask);
+      taskController.clear();
+      notifyListeners();
+    }
+  }
+
+  void addTaskTo_DoneList() {
+    String newTask = taskController.text.trim();
+    if (newTask.isNotEmpty) {
+      doneList.add(newTask);
+      taskController.clear();
+      notifyListeners();
+    }
+  }
+
   @override
   void dispose() {
     // Dispose the controller when the model is disposed
@@ -42,6 +63,7 @@ class TasksModel extends ChangeNotifier {
     inProgressList.add(task);
     notifyListeners();
   }
+
   void transfer_from_inProgress_to_toDo(String task) {
     inProgressList.remove(task);
     toDoList.add(task);
@@ -53,6 +75,7 @@ class TasksModel extends ChangeNotifier {
     checked.clear();
     notifyListeners();
   }
+
   void toggleTaskStatus(String task, bool isChecked) {
     checked[task] = isChecked;
     notifyListeners();
