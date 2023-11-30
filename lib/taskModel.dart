@@ -39,6 +39,7 @@ class TasksModel extends ChangeNotifier {
     }
   }
 
+
   @override
   void dispose() {
     // Dispose the controller when the model is disposed
