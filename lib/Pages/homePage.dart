@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../taskModel.dart';
-import 'donePage.dart';
 import 'genericTaskPage.dart';
-import 'inProgressPage.dart';
-import 'toDoPage.dart';
 
 
 class HomePage extends StatefulWidget {
@@ -17,7 +14,7 @@ class HomePage extends StatefulWidget {
 
 class HomePageState extends State<HomePage> {
 
-
+//TODO: Work on middle page to define effect on left and right side
   @override
   Widget build(BuildContext context) {
     final model = Provider.of<TasksModel>(context, listen: false);
@@ -25,6 +22,8 @@ class HomePageState extends State<HomePage> {
     var todoTasksPage = GenericTaskPage(
       pageTitle: 'To-Do Tasks',
       taskList: model.toDoList,
+
+      //Todo: Safely remove this (String _)
       addTaskCallback: (String _) {
         model.addTaskToTodo();
       },
@@ -37,7 +36,7 @@ class HomePageState extends State<HomePage> {
     );
 
     var inProgressPage = GenericTaskPage(
-      pageTitle: 'To-Do Tasks',
+      pageTitle: 'In Progress Tasks',
       taskList: model.inProgressList,
       addTaskCallback: (String _) {
         model.addTaskToInProgress();
@@ -51,18 +50,19 @@ class HomePageState extends State<HomePage> {
     );
 
     var donePage = GenericTaskPage(
-      pageTitle: 'To-Do Tasks',
-      taskList: model.inProgressList,
+      pageTitle: 'Done Tasks',
+      taskList: model.doneList,
       addTaskCallback: (String _) {
         model.addTaskToInProgress();
       },
       clearTasksCallback: () {
-        model.clearInProgressTasks();
+        model.clearDoneTasks();
       },
       onTaskDismissed: (String task) {
-        model.moveInProgressTaskToTodo(task);
+        model.moveTodoTaskToInProgress(task);
       },
     );
+
     return DefaultTabController(
       initialIndex: 0,
       length: 3,
