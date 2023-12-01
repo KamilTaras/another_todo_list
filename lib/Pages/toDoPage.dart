@@ -3,15 +3,8 @@ import 'package:provider/provider.dart';
 
 import '../taskModel.dart';
 
-class ToDoTasksPage extends StatefulWidget {
+class ToDoTasksPage extends StatelessWidget {
   const ToDoTasksPage({super.key});
-
-  @override
-  State<ToDoTasksPage> createState() => _ToDoTasksPageState();
-}
-
-class _ToDoTasksPageState extends State<ToDoTasksPage>
-    with AutomaticKeepAliveClientMixin {
 
   @override
   bool get wantKeepAlive => true;
@@ -39,8 +32,7 @@ class _ToDoTasksPageState extends State<ToDoTasksPage>
         itemBuilder: (context, index) => Dismissible(
           key: UniqueKey(),
           onDismissed: (dismissDirection) {
-            // Update this to use transfer method from model
-            model.transfer_from_toDoList_to_inProgress(model.toDoList[index]);
+            model.moveTodoTaskToInProgress(model.toDoList[index]);
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(content: Text('Task moved to in progress')),
             );
@@ -67,7 +59,7 @@ class _ToDoTasksPageState extends State<ToDoTasksPage>
         decoration: InputDecoration.collapsed(hintText: 'Write a task to do'),
         controller: model.taskController,
         onSubmitted: (String value) {
-          model.addTaskTo_todoList();
+          model.addTaskToTodo();
         },
       ),
     );
@@ -81,7 +73,7 @@ class _ToDoTasksPageState extends State<ToDoTasksPage>
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           ElevatedButton(
-            onPressed: model.addTaskTo_todoList,
+            onPressed: model.addTaskToTodo,
             child: Text("Add"),
           ),
           ElevatedButton(
@@ -133,7 +125,7 @@ class _ToDoTasksPageState extends State<ToDoTasksPage>
               style: TextButton.styleFrom(backgroundColor: Colors.red.shade200),
               child: const Text('Yes', style: TextStyle(color: Colors.black54)),
               onPressed: () {
-                model.clearTasks(); // Clear tasks using model
+                model.clearTodoTasks(); // Clear tasks using model
                 Navigator.of(context).pop();
               },
             ),

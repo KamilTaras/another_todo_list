@@ -2,18 +2,12 @@ import 'package:another_todo_list/taskModel.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class InProgressTasksPage extends StatefulWidget {
-  const InProgressTasksPage({super.key});
+class InProgressTasksPage extends StatelessWidget {
+  const InProgressTasksPage({super.key,});
 
-  @override
-  State<InProgressTasksPage> createState() => _InProgressTasksPageState();
-}
-
-class _InProgressTasksPageState extends State<InProgressTasksPage> with AutomaticKeepAliveClientMixin {
-
+ // for constructor -> listtype
   @override
   bool get wantKeepAlive => true;
-
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +33,7 @@ class _InProgressTasksPageState extends State<InProgressTasksPage> with Automati
             Dismissible(
               key: UniqueKey(),
               onDismissed: (dismissDirection) {
-                model.transfer_from_inProgress_to_toDo(model.inProgressList[index]);
+                model.moveInProgressTaskToTodo(model.inProgressList[index]);
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(content: Text('Task moved to in progress')),
                 );
@@ -59,14 +53,14 @@ class _InProgressTasksPageState extends State<InProgressTasksPage> with Automati
   }
 
   Padding userInput(BuildContext context) {
-    final model = Provider.of<TasksModel>(context, listen: true);
+     TasksModel model = Provider.of<TasksModel>(context, listen: true);
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: TextField(
         decoration: InputDecoration.collapsed(hintText: 'Write a task to do'),
         controller: model.taskController,
         onSubmitted: (String value) {
-          model.addTaskTo_todoList();
+          model.addTaskToInProgress();
         },
       ),
     );
@@ -91,7 +85,6 @@ class _InProgressTasksPageState extends State<InProgressTasksPage> with Automati
     );
   }
 
-
   Widget bottomButtons(BuildContext context) {
     final model = Provider.of<TasksModel>(context, listen: true);
     return Padding(
@@ -100,7 +93,7 @@ class _InProgressTasksPageState extends State<InProgressTasksPage> with Automati
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           ElevatedButton(
-            onPressed: model.addTaskTo_InProgressList,
+            onPressed: model.addTaskToInProgress,
             child: Text("Add"),
           ),
           ElevatedButton(
@@ -133,7 +126,7 @@ class _InProgressTasksPageState extends State<InProgressTasksPage> with Automati
               style: TextButton.styleFrom(backgroundColor: Colors.red.shade200),
               child: const Text('Yes', style: TextStyle(color: Colors.black54)),
               onPressed: () {
-                model.clearTasks(); // Clear tasks using model
+                model.clearTodoTasks(); // Clear tasks using model
                 Navigator.of(context).pop();
               },
             ),
@@ -143,4 +136,143 @@ class _InProgressTasksPageState extends State<InProgressTasksPage> with Automati
     );
   }
 }
-
+// class TasksList extends StatelessWidget {
+//   final List<String> tasks;
+//   final Function(String) onDismissed;
+//   final bool isChecked;
+//
+//   const TasksList({
+//     Key? key,
+//     required this.tasks,
+//     required this.onDismissed,
+//     this.isChecked = false,
+//   }) : super(key: key);
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return ListView.builder(
+//       itemCount: tasks.length,
+//       itemBuilder: (context, index) {
+//         return Dismissible(
+//           key: UniqueKey(),
+//           onDismissed: (_) => onDismissed(tasks[index]),
+//           child: ListTile(
+//             title: Card(
+//               color: Colors.deepPurple.shade50,
+//               child: Padding(
+//                 padding: const EdgeInsets.only(left: 10.0),
+//                 child: CheckboxListTile(
+//                   title: Text(
+//                     tasks[index],
+//                     style: TextStyle(
+//                       decoration: isChecked
+//                           ? TextDecoration.lineThrough
+//                           : TextDecoration.none,
+//                     ),
+//                   ),
+//                   value: isChecked,
+//                   onChanged: (bool? value) {
+//                     // Your toggle logic here
+//                   },
+//                 ),
+//               ),
+//             ),
+//           ),
+//         );
+//       },
+//     );
+//   }
+// }
+//
+// class TextInputField extends StatelessWidget {
+//   final String hintText;
+//   final TextEditingController controller;
+//   final Function(String) onSubmit;
+//
+//   const TextInputField({
+//     Key? key,
+//     required this.hintText,
+//     required this.controller,
+//     required this.onSubmit,
+//   }) : super(key: key);
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return Padding(
+//       padding: const EdgeInsets.all(8.0),
+//       child: TextField(
+//         decoration: InputDecoration.collapsed(hintText: hintText),
+//         controller: controller,
+//         onSubmitted: onSubmit,
+//       ),
+//     );
+//   }
+// }
+//
+// class ActionButtons extends StatelessWidget {
+//   final VoidCallback onAddPressed;
+//   final VoidCallback onDeleteAllPressed;
+//
+//   const ActionButtons({
+//     Key? key,
+//     required this.onAddPressed,
+//     required this.onDeleteAllPressed,
+//   }) : super(key: key);
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return Padding(
+//       padding: const EdgeInsets.only(bottom: 15.0),
+//       child: Row(
+//         mainAxisAlignment: MainAxisAlignment.spaceAround,
+//         children: [
+//           ElevatedButton(
+//             onPressed: onAddPressed,
+//             child: Text("Add"),
+//           ),
+//           ElevatedButton(
+//             onPressed: onDeleteAllPressed,
+//             child: Text("Delete all"),
+//           ),
+//         ],
+//       ),
+//     );
+//   }
+// }
+//
+//
+// class ConfirmationDialog extends StatelessWidget {
+//   final String title;
+//   final String content;
+//   final VoidCallback onConfirm;
+//   final VoidCallback onCancel;
+//
+//   const ConfirmationDialog({
+//     Key? key,
+//     required this.title,
+//     required this.content,
+//     required this.onConfirm,
+//     required this.onCancel,
+//   }) : super(key: key);
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return AlertDialog(
+//       title: Text(title),
+//       content: Text(content),
+//       actions: <Widget>[
+//         TextButton(
+//           child: const Text('No', style: TextStyle(color: Colors.black54)),
+//           onPressed: onCancel,
+//         ),
+//         TextButton(
+//           style: TextButton.styleFrom(backgroundColor: Colors.red.shade200),
+//           child: const Text('Yes', style: TextStyle(color: Colors.black54)),
+//           onPressed: onConfirm,
+//         ),
+//       ],
+//     );
+//   }
+// }
+//
+//

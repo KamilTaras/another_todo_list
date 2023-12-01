@@ -12,7 +12,7 @@ class TasksModel extends ChangeNotifier {
 
   TextEditingController taskController = TextEditingController();
 
-  void addTaskTo_todoList() {
+  void addTaskToTodo() {
     String newTask = taskController.text.trim();
     if (newTask.isNotEmpty) {
       toDoList.add(newTask);
@@ -21,7 +21,7 @@ class TasksModel extends ChangeNotifier {
     }
   }
 
-  void addTaskTo_InProgressList() {
+  void addTaskToInProgress() {
     String newTask = taskController.text.trim();
     if (newTask.isNotEmpty) {
       inProgressList.add(newTask);
@@ -30,7 +30,7 @@ class TasksModel extends ChangeNotifier {
     }
   }
 
-  void addTaskTo_DoneList() {
+  void addTaskToDone() {
     String newTask = taskController.text.trim();
     if (newTask.isNotEmpty) {
       doneList.add(newTask);
@@ -42,38 +42,47 @@ class TasksModel extends ChangeNotifier {
 
   @override
   void dispose() {
-    // Dispose the controller when the model is disposed
     taskController.dispose();
     super.dispose();
   }
 
-  void transfer_from_toDoList_to_inProgress(String task) {
+  void moveTodoTaskToInProgress(String task) {
     toDoList.remove(task);
     inProgressList.add(task);
     notifyListeners();
   }
 
-  void transfer_from_inProgress_to_done(String task) {
+  void moveInProgressTaskToDone(String task) {
     inProgressList.remove(task);
     doneList.add(task);
     notifyListeners();
   }
 
-  void transfer_from_doneList_to_inProgress(String task) {
+  void moveDoneTaskToInProgress(String task) {
     doneList.remove(task);
     inProgressList.add(task);
     notifyListeners();
   }
 
-  void transfer_from_inProgress_to_toDo(String task) {
+  void moveInProgressTaskToTodo(String task) {
     inProgressList.remove(task);
     toDoList.add(task);
     notifyListeners();
   }
 
-  void clearTasks() {
+  void clearTodoTasks() {
     toDoList.clear();
     checked.clear();
+    notifyListeners();
+  }
+
+  void clearInProgressTasks(){
+    inProgressList.clear();
+    notifyListeners();
+  }
+
+  void clearDoneTasks(){
+    doneList.clear();
     notifyListeners();
   }
 
@@ -81,6 +90,5 @@ class TasksModel extends ChangeNotifier {
     checked[task] = isChecked;
     notifyListeners();
   }
-// Add, Remove, or Move tasks methods here
-// Call notifyListeners() after modifying the lists
+
 }
