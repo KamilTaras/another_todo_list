@@ -11,7 +11,7 @@ class TasksModel extends ChangeNotifier {
   Map<String, bool> checked = {};
 
   TextEditingController taskController = TextEditingController();
-
+//TODO: Let it taking arguments to functions
   void addTaskToTodo() {
     String newTask = taskController.text.trim();
     if (newTask.isNotEmpty) {
