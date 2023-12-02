@@ -1,44 +1,16 @@
 import 'package:flutter/material.dart';
 
 class TasksModel extends ChangeNotifier {
-  List<String> toDoList = [
+  List<String> todoList = [
     "To-Do task 1 From provider",
     "To-Do task 2 From provider",
   ];
   List<String> inProgressList = ["in progress task 1"];
   List<String> doneList = ["done task 1"];
-
+//TODO: I have to fix checkboxes...
   Map<String, bool> checked = {};
 
   TextEditingController taskController = TextEditingController();
-//TODO: Let it taking arguments to functions
-  void addTaskToList() {
-    String newTask = taskController.text.trim();
-    if (newTask.isNotEmpty) {
-      toDoList.add(newTask);
-      taskController.clear();
-      notifyListeners();
-    }
-  }
-
-  void addTaskToInProgress() {
-    String newTask = taskController.text.trim();
-    if (newTask.isNotEmpty) {
-      inProgressList.add(newTask);
-      taskController.clear();
-      notifyListeners();
-    }
-  }
-
-  void addTaskToDone() {
-    String newTask = taskController.text.trim();
-    if (newTask.isNotEmpty) {
-      doneList.add(newTask);
-      taskController.clear();
-      notifyListeners();
-    }
-  }
-
 
   @override
   void dispose() {
@@ -46,43 +18,24 @@ class TasksModel extends ChangeNotifier {
     super.dispose();
   }
 
-  void moveTodoTaskToInProgress(String task) {
-    toDoList.remove(task);
-    inProgressList.add(task);
+  void addTaskToList(List<String> list) {
+    String newTask = taskController.text.trim();
+    if (newTask.isNotEmpty) {
+      list.add(newTask);
+      taskController.clear();
+      notifyListeners();
+    }
+  }
+
+  void moveTaskFromTo(String task, List<String> listFrom, List<String> listTo) {
+    listFrom.remove(task);
+    listTo.add(task);
     notifyListeners();
   }
 
-  void moveInProgressTaskToDone(String task) {
-    inProgressList.remove(task);
-    doneList.add(task);
-    notifyListeners();
-  }
-
-  void moveDoneTaskToInProgress(String task) {
-    doneList.remove(task);
-    inProgressList.add(task);
-    notifyListeners();
-  }
-
-  void moveInProgressTaskToTodo(String task) {
-    inProgressList.remove(task);
-    toDoList.add(task);
-    notifyListeners();
-  }
-
-  void clearTodoTasks() {
-    toDoList.clear();
+  void clearList(List<String> list) {
+    list.clear();
     checked.clear();
-    notifyListeners();
-  }
-
-  void clearInProgressTasks(){
-    inProgressList.clear();
-    notifyListeners();
-  }
-
-  void clearDoneTasks(){
-    doneList.clear();
     notifyListeners();
   }
 
@@ -90,5 +43,4 @@ class TasksModel extends ChangeNotifier {
     checked[task] = isChecked;
     notifyListeners();
   }
-
 }

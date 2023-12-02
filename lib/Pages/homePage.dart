@@ -18,48 +18,53 @@ class HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     final model = Provider.of<TasksModel>(context, listen: false);
+    var todoList = model.todoList;
+    var inProgressList = model.inProgressList;
+    var doneList = model.doneList;
+
 
     var todoTasksPage = GenericTaskPage(
       pageTitle: 'To-Do Tasks',
-      taskList: model.toDoList,
+      taskList: todoList,
 
       //Todo: Safely remove this (String _)
       addTaskCallback: (String _) {
-        model.addTaskToList();
+        model.addTaskToList(todoList);
       },
       clearTasksCallback: () {
-        model.clearTodoTasks();
+        model.clearList(todoList);
       },
       onTaskDismissed: (String task) {
-        model.moveTodoTaskToInProgress(task);
+        model.moveTaskFromTo(task,todoList,inProgressList);
       },
     );
 
     var inProgressPage = GenericTaskPage(
       pageTitle: 'In Progress Tasks',
-      taskList: model.inProgressList,
+      taskList: inProgressList,
       addTaskCallback: (String _) {
-        model.addTaskToInProgress();
+        model.addTaskToList(inProgressList);
+
       },
       clearTasksCallback: () {
-        model.clearInProgressTasks();
+        model.clearList(inProgressList);
       },
       onTaskDismissed: (String task) {
-        model.moveInProgressTaskToTodo(task);
+        model.moveTaskFromTo(task,inProgressList,todoList);
       },
     );
 
     var donePage = GenericTaskPage(
       pageTitle: 'Done Tasks',
-      taskList: model.doneList,
+      taskList: doneList,
       addTaskCallback: (String _) {
-        model.addTaskToInProgress();
+        model.addTaskToList(doneList);
       },
       clearTasksCallback: () {
-        model.clearDoneTasks();
+        model.clearList(inProgressList);
       },
       onTaskDismissed: (String task) {
-        model.moveTodoTaskToInProgress(task);
+        model.moveTaskFromTo(task,doneList,inProgressList);
       },
     );
 
