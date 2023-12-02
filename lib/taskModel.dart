@@ -12,7 +12,7 @@ class TasksModel extends ChangeNotifier {
 
   TextEditingController taskController = TextEditingController();
 //TODO: Let it taking arguments to functions
-  void addTaskToTodo() {
+  void addTaskToList() {
     String newTask = taskController.text.trim();
     if (newTask.isNotEmpty) {
       toDoList.add(newTask);

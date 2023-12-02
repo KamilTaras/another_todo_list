@@ -25,7 +25,7 @@ class HomePageState extends State<HomePage> {
 
       //Todo: Safely remove this (String _)
       addTaskCallback: (String _) {
-        model.addTaskToTodo();
+        model.addTaskToList();
       },
       clearTasksCallback: () {
         model.clearTodoTasks();

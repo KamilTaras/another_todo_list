@@ -21,7 +21,7 @@ class GenericTaskPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final model = Provider.of<TasksModel>(context, listen: false);
+    final model = Provider.of<TasksModel>(context, listen: true);
 
     return Scaffold(
       appBar: AppBar(title: Text(pageTitle)),
