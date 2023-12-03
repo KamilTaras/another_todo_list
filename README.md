@@ -8,16 +8,21 @@ The idea of this app is simple. We have **3 categories** of tasks:
 - in progress
 - done
 
+But it is designed the way that users will be able to easily add their own pages in the future
+
+## What changed since last update?
+
+Now the code is cleaner. I've made it more generic and significantly reduced repetitions. Many elements are now easily reusable for future pages.
+Material Design 3 has now been integrated into the app :) 
+
 ## What am I going to change?
 **For sure I want to:**
-- Make code more generic, to add also inProgress and done pages
-- allow user to change category of the task by swiping cards with tasks
+
 - allow user to change position of the task within the list
 - add button which will allow user to delete only checked tasks
+- fix bug where now it is impssible to check task, as I plan to redefine a little bit the way of managment of state it was easier for now disable it.
 
-  
-## What I did already?
-![studio64_As2sUnnL2C](https://github.com/KamilTaras/another_todo_list/assets/116663154/4da1425c-645d-4f46-9ff2-7a87d4f0ea7c)
 
+![studio64_CHYgDIxXpQ](https://github.com/KamilTaras/another_todo_list/assets/116663154/db735fd3-2b52-4814-b41c-a936e562444c)
 
 
